@@ -3,7 +3,7 @@ using System.Collections;
 
 
 public enum EnemyAIState{
-	idle,walk,hit,death,
+	idle,walk,hit,death,Shot,
 }
 
 
@@ -20,8 +20,11 @@ public class EnemyAI : MonoBehaviour {
 	public Transform firstPlayer;
 	public Transform gunPos;
 	public AudioSource playShot;
+	public GameObject mainM;
+	private Material myM;
 	void Start () {
 		lastPos = this.transform.position;
+		myM= mainM.gameObject.GetComponent<SkinnedMeshRenderer> ().material;
 	}
 	
 	RaycastHit hit;
@@ -46,6 +49,12 @@ public class EnemyAI : MonoBehaviour {
 				state = EnemyAIState.idle;
 				myAni.SetTrigger ("idle");
 				maxTime = Random.Range (1,5);
+			}
+			else if (state == EnemyAIState.Shot) 
+			{
+
+				state = EnemyAIState.walk;
+				maxTime = Random.Range (1,2);
 			}
 
 		    
@@ -80,23 +89,46 @@ public class EnemyAI : MonoBehaviour {
 		#region 射线检测
 
 		if(state!=EnemyAIState.death){
-
-			if(Physics.Raycast(gunPos.position,transform.forward,out hit,1000))
+			if(Physics.Raycast(gunPos.position-Vector3.up*0.5f,transform.forward,out hit,300))
 			{
-				if(hit.transform.gameObject.name=="FPSController")
+				if(hit.transform.gameObject.CompareTag("Player"))
 				{
 					myAni.SetTrigger("shot");
 					if(!playShot.isPlaying)
 					{
 						playShot.Play();
+						fireBullet();
+						myM.color=Color.red;
+						state=EnemyAIState.Shot;
 					}
+
 				}
-				else{
+				else
+				{
+					myM.color=Color.white;
+					//state=EnemyAIState.idle;
 				}
 			}
 		}
 
 		#endregion
+	
+	
+		if (Input.GetKeyDown(KeyCode.Space)) {
+			//fireBullet ();	
+		}
+	}
+
+	private void fireBullet()
+	{
+		GameObject go = MainUIController.Instance.getABullet ();
+		Vector3 v1 =MainUIController.Instance.mainPlayer.Gun.position- this.transform.position;
+		go.GetComponent<Bullet> ().SetForWard (new Vector3(v1.x,-0.3f,v1.z));
+		go.transform.position =gunPos.position;
+		go.transform.rotation = this.transform.rotation;
+		//Rigidbody rig1=go.GetComponent<Rigidbody> ();
+		//rig1.AddForce(myTransform.forward*1000);
+
 	}
 
 	string str1="";
@@ -113,7 +145,7 @@ public class EnemyAI : MonoBehaviour {
 			myAni.SetTrigger ("death");
 			state = EnemyAIState.death;
 			newPos=EnemyAIController.Instance.giveBackAI (this);
-			Invoke ("ResetAI",3.0f);
+			Invoke ("ResetAI",1.0f);
 		}
 	}
 

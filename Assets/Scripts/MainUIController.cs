@@ -31,7 +31,15 @@ public class MainUIController : MonoBehaviour {
 	[SerializeField] private GameObject bullet_prefab;
 	public int MoveSpeed=40;
 	public float timeFPS = 0.0f;
+
+	public BgUIScripts bgUIScripts;
+
+
 	GUIStyle sy1=new GUIStyle();
+
+
+
+
 
 	#region mono event
 	void Start () 
@@ -46,6 +54,11 @@ public class MainUIController : MonoBehaviour {
 
 	void Update () {
 		timeFPS = 1.0f / Time.deltaTime;
+	}
+
+
+	void OnGUI(){
+		GUILayout.Label (timeFPS.ToString("0.0"),sy1);
 	}
 
 	#endregion
@@ -90,12 +103,14 @@ public class MainUIController : MonoBehaviour {
 		mainSetting.gameObject.SetActive (true);
 	}
 
+	public void setBoolDot(Vector3 worldPos){
+		
+	}
+
 	#endregion
 
 
-	void OnGUI(){
-		GUILayout.Label (timeFPS.ToString("0.0"),sy1);
-	}
+
 
 
 	#region   资源池

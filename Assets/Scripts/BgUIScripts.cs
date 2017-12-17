@@ -10,7 +10,12 @@ public class BgUIScripts : UIBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
 	#region var
 
 	public Transform gun;
+	public RectTransform BgUI_RT;
+	public RectTransform CrossHair_RT;
+	public RectTransform BloodDot_RT;
 
+	private Vector3 corssHairWorldPos;
+	private Vector3 bloodDotWorldPos;
 	#endregion
 
 
@@ -50,10 +55,31 @@ public class BgUIScripts : UIBehaviour,IBeginDragHandler,IDragHandler,IEndDragHa
 	#endregion
 
 
+	#region external function
+
+	private Vector2 ScreenPos;
+	private Vector2 UIPos;
+	public void setCrossHairPos(Vector3 worldPos){
+		ScreenPos = RectTransformUtility.WorldToScreenPoint (Camera.main, worldPos);
+		RectTransformUtility.ScreenPointToLocalPointInRectangle (BgUI_RT,ScreenPos,null,out UIPos);
+		CrossHair_RT.anchoredPosition = UIPos;
+	}
+
+	public void SetBloodDotPos(Vector3 worldPos){
+		ScreenPos = RectTransformUtility.WorldToScreenPoint (Camera.main, worldPos);
+		RectTransformUtility.ScreenPointToLocalPointInRectangle (BgUI_RT,ScreenPos,null,out UIPos);
+		BloodDot_RT.anchoredPosition = UIPos;
+	}
+
+
+
+	#endregion
+
 	#region monoEvent
 
 	void Start () {
-	
+		BgUI_RT = this.gameObject.GetComponent<RectTransform> ();
+
 	}
 	
 

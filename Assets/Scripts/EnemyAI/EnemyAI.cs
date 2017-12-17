@@ -123,7 +123,7 @@ public class EnemyAI : MonoBehaviour {
 	{
 		GameObject go = MainUIController.Instance.getABullet ();
 		Vector3 v1 =MainUIController.Instance.mainPlayer.Gun.position- this.transform.position;
-		go.GetComponent<Bullet> ().SetForWard (new Vector3(v1.x,-0.3f,v1.z));
+		go.GetComponent<Bullet> ().SetForWard (new Vector3(v1.x,-0.6f,v1.z));
 		go.transform.position =gunPos.position;
 		go.transform.rotation = this.transform.rotation;
 		//Rigidbody rig1=go.GetComponent<Rigidbody> ();

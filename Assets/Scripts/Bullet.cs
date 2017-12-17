@@ -28,7 +28,11 @@ public class Bullet : MonoBehaviour {
 		}
 	}
 
+
 	void OnCollisionEnter(Collision collider){
+		if (collider.transform.gameObject.CompareTag("Player")) {
+			MainUIController.Instance.bgUIScripts.SetBloodDotPos (this.transform.position);
+		}
 		death ();
 	}
 
@@ -39,4 +43,7 @@ public class Bullet : MonoBehaviour {
 		timer = 0.0f;
 		MainUIController.Instance.ReturnABullet (this.gameObject);
 	}
+
+
+
 }
